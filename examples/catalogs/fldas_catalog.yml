@@ -1,0 +1,83 @@
+# sources: 
+#   fldas_noah01_anomaly_daily:
+#     description: FLDAS public dataset from Noah01 Model on Daily Anomalies
+#     driver: opendap
+#     parameters:
+#       url_base:
+#         description: Base URL to the server directory for FLDAS Noah 0.1 degress anamaly 
+#         type: str
+#         default: 'https://hydro1.gesdisc.eosdis.nasa.gov/opendap/hyrax/FLDAS/FLDAS_NOAH01_A_EA_D.001'
+#       year:
+#         description: Year in 4 digit integer, for example 2019
+#         type: int
+#       month:
+#         description: month as int, for example 5, 10, 12
+#         type: int
+#       day: 
+#         description: day as int, for example 3, 23, 30
+#         type: int
+#     args:
+#       urlpath: "{{ url_base }}/{{ year }}/{{ '%02d' % month }}/FLDAS_NOAH01_A_EA_D.A{{year}}{{ '%02d' % month }}{{ '%02d' % day }}.001.nc"    
+#       chunks: {}
+#       xarray_kwargs:
+#         decode_cf: False
+# https://www.anaconda.com/intake-parsing-data-from-filenames-and-paths/
+sources: 
+  fldas_noah01_a_regional_daily_single:
+    description: FLDAS public dataset from Noah01 Model on Daily Anomalies
+    driver: netcdf
+    parameters:
+      url_base:
+        description: Base URL to the server directory for FLDAS Noah v0.1 degress anomaly 
+        type: str
+        default: "/home/hayley/data/mint/FLDAS/" #FLDAS_NOAH01_A_EA_D.001"
+      region:
+        description: Region in Africa. EA for Eastern Aftrica, SA for Southern Aftrica
+        type: str
+        allowed: ["EA", "SA"] 
+      year:
+        description: Year in 4 digit integer, for example 2019
+        type: int
+        default: 2019
+      month:
+        description: month as int, for example 5, 10, 12
+        type: int
+        default: 4
+      day: 
+        description: day as int, for example 3, 23, 30
+        type: int
+        default: 1
+    args:
+      urlpath: "{{ url_base }}/FLDAS_NOAH01_A_{{ region }}_D.001/{{ year }}/{{ '%02d' % month }}/FLDAS_NOAH01_A_{{ region }}_D.A{{year}}{{ '%02d' % month }}{{ '%02d' % day }}.001.nc"    
+      chunks: {}
+      xarray_kwargs:
+        decode_cf: False
+  fldas_noah01_a_regional_daily_all:
+    description: FLDAS public dataset from Noah01 Model on Daily Anomalies combinded 
+    driver: netcdf
+    parameters:
+      url_base:
+        description: Base URL to the server directory for FLDAS Noah v0.1 degress anomaly 
+        type: str
+        default: "/home/hayley/data/mint/FLDAS/" 
+      region:
+        description: Region in Africa. EA for Eastern Aftrica, SA for Southern Aftrica
+        type: str
+        allowed: ["EA", "SA"] 
+      year:
+        description: Year in 4 digit integer, for example 2019
+        type: int
+        default: 2019
+      month:
+        description: month as int, for example 5, 10, 12
+        type: int
+        default: 4
+    args:
+        urlpath: "{{ url_base }}/FLDAS_NOAH01_A_{{ region }}_D.001/{{ year }}/{{ '%02d' % month }}/FLDAS_NOAH01_A_{{ region }}_D.A{{year}}{{ '%02d' % month }}*.001.nc"    
+        chunks: 
+          time: 1
+          X: 486
+          Y: 443
+        concat_dim: time
+        xarray_kwargs:
+          decode_cf: False
