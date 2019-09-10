@@ -25,17 +25,12 @@ print("Importing: ", file_dir)
 if file_dir not in sys.path:
     sys.path.insert(0, file_dir)
     print(f"Added {str(file_dir)} to sys.path")
-
-SP_UTILS = Path.home()/'Playground/Spacenet_Preprocess/scripts'
-assert SP_UTILS.exists()
-if str(SP_UTILS) not in sys.path:
-    sys.path.insert(0, str(SP_UTILS))
-    print(f"Added {SP_UTILS} to sys.path")
+    
     
 ###############################################################################
 ### Import my modules ###
 ###############################################################################
-from output_helpers import nprint
+from utils import nprint
 from geo_helpers import bounds2poly, crop_gdf_to_bounds, get_polys_at_lonlat
 
 
